@@ -8,19 +8,13 @@ CREATE TABLE ratings (
                          UNIQUE (book_id, user_id)
 );
 
--- Индекс для быстрого поиска рейтингов по книгам с сортировкой по дате
-CREATE INDEX idx_ratings_book_id_created_at ON ratings(book_id, created_at DESC);
-
--- Индекс для быстрого поиска рейтингов по книгам с сортировкой по значению рейтинга
-CREATE INDEX idx_ratings_book_id_rating ON ratings(book_id, rating DESC);
-
--- Индекс для быстрого поиска рейтингов по пользователям с сортировкой по дате
-CREATE INDEX idx_ratings_user_id_created_at ON ratings(user_id, created_at DESC);
-
--- Составной индекс для быстрого поиска по книге+пользователю
+-- Keep the unique composite index for the constraint
 CREATE UNIQUE INDEX idx_ratings_book_user ON ratings(book_id, user_id);
 
--- Простое представление для рейтингов
+-- Keep index for fast retrieval of book ratings sorted by rating
+CREATE INDEX idx_ratings_book_id_rating ON ratings(book_id, rating DESC);
+
+-- View for average ratings
 CREATE OR REPLACE VIEW book_average_ratings AS
 SELECT
     book_id,

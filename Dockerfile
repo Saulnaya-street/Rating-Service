@@ -21,6 +21,6 @@ COPY --from=builder /app/db-service/migrations/ ./migrations/
 RUN apk update && apk add --no-cache ca-certificates
 
 # Добавляем инструмент для миграций
-RUN go install github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+RUN go install github.com/golang-migrate/migrate/v4/cmd/migrate@v4.16.2
 
 CMD ["./main"]
