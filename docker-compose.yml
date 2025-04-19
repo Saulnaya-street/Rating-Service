@@ -7,7 +7,6 @@ services:
       - "8080:8080"
     depends_on:
       - db
-      - redis
       - kafka
       - zookeeper
     environment:
@@ -17,8 +16,6 @@ services:
       - DB_PASSWORD=123
       - DB_NAME=Ratings
       - DB_SSLMODE=disable
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
       - KAFKA_BROKERS=kafka:9092
       - KAFKA_TOPIC=rating-events
       - KAFKA_GROUP_ID=rating-service
@@ -35,15 +32,6 @@ services:
       - POSTGRES_PASSWORD=123
       - POSTGRES_USER=postgres
       - POSTGRES_DB=Ratings
-    networks:
-      - rating-network
-
-  redis:
-    image: redis:7.0-alpine
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
     networks:
       - rating-network
 
@@ -75,23 +63,9 @@ services:
     networks:
       - rating-network
 
-  kafka-ui:
-    image: provectuslabs/kafka-ui:latest
-    ports:
-      - "8090:8080"
-    depends_on:
-      - kafka
-    environment:
-      KAFKA_CLUSTERS_0_NAME: local
-      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
-      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
-    networks:
-      - rating-network
-
 networks:
   rating-network:
     driver: bridge
 
 volumes:
   postgres_data:
-  redis_data:
